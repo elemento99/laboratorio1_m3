@@ -1,8 +1,8 @@
 console.log("js funcionando");
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    fetch("dist/assets/doctors.json")  // Ajusta la ruta según la ubicación de tu archivo JSON
+    
+    fetch("dist/assets/doctors.json")  
         .then(response => {
             if (!response.ok) {
                 throw new Error("Error al cargar el archivo JSON");
@@ -10,14 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
             return response.json();
         })
         .then(data => {
-            // Verificar que los datos contienen la propiedad 'doctors'
+
             if (!data.doctors) {
                 throw new Error("La propiedad 'doctors' no está definida en el JSON");
             }
 
-            const { doctors } = data;  // Destructuring para acceder al array de doctores
+            const { doctors } = data;  
 
-            // Llenar el dropdown con los nombres de los doctores
+         
             const doctorSelector = document.getElementById("doctorSelector");
             doctors.forEach(doctor => {
                 const option = document.createElement("option");
@@ -26,11 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 doctorSelector.appendChild(option);
             });
 
-            // Función para mostrar los detalles de un doctor en el DOM
             const displayDoctorDetails = (doctor) => {
                 const { name, specialty, experience, profile, availableHours, contact } = doctor;
 
-                // Mostrar en el contenedor del DOM
+                
                 document.getElementById("doctorName").textContent = `Nombre: ${name}`;
                 document.getElementById("doctorSpecialty").textContent = `Especialidad: ${specialty}`;
                 document.getElementById("doctorExperience").textContent = `Años de experiencia: ${experience}`;
@@ -39,32 +38,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("doctorContact").textContent = `Contacto: ${contact}`;
             };
 
-            // Listener para el cambio en el selector de doctor
+          
             doctorSelector.addEventListener("change", (event) => {
                 const selectedDoctorName = event.target.value;
 
                 if (selectedDoctorName) {
                     const doctor = doctors.find(doc => doc.name === selectedDoctorName);
                     if (doctor) {
-                        displayDoctorDetails(doctor);  // Mostrar detalles del doctor seleccionado
+                        displayDoctorDetails(doctor); 
                     } else {
                         console.log("Doctor no encontrado");
                     }
                 } else {
-                    // Limpiar el contenedor si no se selecciona ningún doctor
+                   
                     document.getElementById("doctorDetails").innerHTML = "<h2>Detalles del Doctor</h2>";
                 }
             });
 
-            // Función para renderizar las cards de los doctores
             const renderDoctors = (filter = {}) => {
                 const teamSection = document.querySelector(".team__members");
-                teamSection.innerHTML = "";  // Limpiar la sección de doctores
+                teamSection.innerHTML = ""; 
 
                 doctors.forEach(doctor => {
                     if (
                         (filter.specialties && !filter.specialties.includes(doctor.specialty)) ||
-                        (filter.experience && doctor.experience <= filter.experience)
+                        (filter.experience && doctor.experience < filter.experience) 
                     ) return;
 
                     const doctorCard = `
@@ -84,32 +82,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     teamSection.innerHTML += doctorCard;
                 });
 
-                // Añadir listeners a los botones de "Ver detalles"
+                
                 document.querySelectorAll(".view-details").forEach(button => {
                     button.addEventListener("click", (event) => {
                         const doctorName = event.target.closest(".team__member").querySelector(".team__name").textContent;
                         const doctor = doctors.find(doc => doc.name === doctorName);
                         if (doctor) {
-                            displayDoctorDetails(doctor);  // Mostrar detalles en el contenedor
+                            displayDoctorDetails(doctor);  
                         }
                     });
                 });
             };
 
-            // Función de filtrado
+           
             const applyFilters = () => {
                 const selectedSpecialties = Array.from(document.querySelectorAll(".filter-specialty:checked")).map(el => el.value);
                 const filterYears = document.querySelector(".filter-years:checked") ? 5 : null;
 
-                renderDoctors({ specialties: selectedSpecialties, experience: filterYears });
+     
+                renderDoctors({ 
+                    specialties: selectedSpecialties, 
+                    experience: filterYears ? 5 : null 
+                });
             };
 
-            // Listeners para los filtros
+        
             document.querySelectorAll(".filters input").forEach(input => {
                 input.addEventListener("change", applyFilters);
             });
 
-            // Inicializar renderizado de doctores
+          
             renderDoctors();
         })
         .catch(error => {

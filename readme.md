@@ -1,108 +1,167 @@
-# Proyecto Formulario Contacto - Clínica Médica
+Descripción
 
-Este proyecto permite capturar información del usuario mediante prompts y mostrarla en la consola y en una alerta del navegador. También incluye validación de datos, manejo de errores y debugging.
+Este proyecto incluye dos archivos HTML:
 
-## Descripción
+    datos.html: Realiza operaciones con archivos JSON que contienen información sobre los doctores y los servicios médicos disponibles en un hospital. Incluye operaciones como clonación de objetos JSON, fusión de objetos JSON y recorrido de estos objetos.
 
-La aplicación solicita tres datos al usuario:
-1. **Nombre:** Una cadena de texto.
-2. **Correo electrónico:** Una cadena que contenga un `@`.
-3. **Teléfono:** Un número con al menos 7 dígitos.
+    admin.html: Proporciona un panel de administración para gestionar la información de los doctores y servicios médicos, utilizando estructuras de datos como arreglos, pilas y colas.
 
-Los datos ingresados se validan y se manejan errores mediante `try/catch`. Si ocurre un error (como un formato incorrecto), se informa al usuario mediante una alerta.
+Archivo datos.html
+Descripción
 
-## Funcionamiento del Código
+La página datos.html realiza varias operaciones con archivos JSON, los cuales contienen información sobre los doctores y los servicios médicos disponibles en el hospital. Las operaciones incluyen:
 
-### Variables
+    Clonación de Objetos JSON
+    Fusión de Objetos JSON
+    Recorrido de Objetos JSON
 
-Se utilizan las siguientes variables:
-- **`const userName`**: Almacena el nombre del usuario. Su scope es limitado al bloque `try`.
-- **`const userEmail`**: Almacena el correo del usuario. Tiene el mismo alcance que `userName`.
-- **`const userPhone`**: Almacena el teléfono. Tiene el mismo scope que las variables anteriores.
+Funcionalidades
+1. Clonación de un Objeto JSON
 
-### Operadores
+    Se crea una copia profunda de un objeto JSON (lista de doctores) usando JSON.parse(JSON.stringify()).
+    Se modifica un campo en el objeto clonado (por ejemplo, cambiando el nombre de un doctor).
+    El objeto clonado y modificado se muestra tanto en el navegador como en la consola.
 
-Se usan operadores para validar los datos ingresados:
-- **`===`**: Verifica que el correo contenga un `@`.
-- **`isNaN`**: Comprueba que el teléfono sea un número.
+2. Fusión de Objetos JSON
 
-### Manejo de Errores
+    Se fusiona la lista de doctores con la lista de servicios médicos, asignando a cada doctor los servicios correspondientes a su especialidad.
+    El resultado de la fusión se muestra en formato JSON.
 
-El manejo de errores se implementa con un bloque `try/catch`:
-- Si el nombre es vacío o no es un string, se lanza un error.
-- Si el correo no contiene `@`, se lanza un error.
-- Si el teléfono no es un número válido, se lanza un error.
+3. Recorrido de Objetos JSON
 
-### Debugging
+    Se recorre el objeto JSON de los doctores utilizando forEach y se muestra la lista de doctores con sus detalles en el navegador.
 
-Se utiliza `debugger` para pausar la ejecución y examinar las variables en el entorno del navegador.
+Uso de JSON.stringify()
 
-Ejemplo:
+    Tanto el objeto clonado como el objeto fusionado se convierten en cadenas JSON usando JSON.stringify() para mostrarlas de manera legible.
 
-debugger; // Pausa la ejecución
-let exampleVariable;
-console.log(exampleVariable.length); // Error: No se puede acceder a la propiedad "length" de undefine
+Archivos Utilizados
 
+    doctors.json: Información sobre los doctores (nombre, especialidad, horarios, etc.).
+    medical-services.json: Información sobre los servicios médicos (nombre, descripción, precio, etc.).
 
+Instalación
 
+    Asegúrate de tener los archivos JSON en el directorio dist/assets:
+        doctors.json
+        medical-services.json
+    Abre el archivo datos.html en tu navegador y verifica que los datos se muestren correctamente en el navegador y en la consola.
 
+Archivo admin.html
+Descripción
 
-### Proyecto Equipo Médico - Clínica Médica
+El archivo admin.html es un panel de administración para gestionar la información de los doctores y servicios médicos. Utiliza estructuras de datos como arreglos, pilas y colas para facilitar la administración de los datos.
+Funcionalidades
+1. Arreglo (Array) de Doctores
 
-Este proyecto muestra un listado de doctores con información sobre cada uno, permitiendo filtrar los doctores por especialidad y años de experiencia mediante casillas de verificación. El contenido se genera dinámicamente con JavaScript y el DOM se actualiza en tiempo real según los filtros seleccionados.
+Se usa un arreglo doctorArray para almacenar y gestionar la lista de doctores. Las operaciones disponibles son:
 
-## Descripción
+    Agregar un nuevo doctor: Usando el botón para agregar un doctor al final del arreglo.
+    Eliminar el último doctor: Usando el botón para eliminar el último doctor del arreglo.
+    Buscar un doctor por nombre: Permite buscar un doctor por nombre en el arreglo.
 
-La aplicación muestra un listado de doctores con su nombre, especialidad, perfil y años de experiencia. Los usuarios pueden filtrar los doctores según:
+Código para el Arreglo:
 
-1. **Especialidad**: Como Cardiología, Neurología, Pediatría y Oncología.
-2. **Años de experiencia**: Los usuarios pueden seleccionar doctores con más de 5 años de experiencia.
+// Inicialización del arreglo de doctores
+let doctorArray = [...doctors]; // Copia del arreglo original de doctores
 
-El filtro permite al usuario seleccionar múltiples especialidades y el criterio de años de experiencia.
+// Mostrar los doctores en el DOM
+document.getElementById('doctor-array').textContent = JSON.stringify(doctorArray, null, 2);
 
-## Variables
-
-- **`doctors`**: Arreglo que contiene los datos de los doctores, incluyendo nombre, especialidad, años de experiencia y perfil. Es accesible globalmente.
-  
-- **`selectedSpecialties`**: Arreglo local dentro de la función `applyFilters()`, que contiene las especialidades seleccionadas por el usuario.
-
-- **`filterYears`**: Valor del filtro de "Años de experiencia", utilizado para filtrar doctores con más de 5 años de experiencia.
-
-- **`doctorCard`**: Variable local dentro de `renderDoctors()`, que contiene el HTML de la tarjeta de cada doctor.
-
-- **`teamSection`**: Contenedor del DOM donde se mostrarán las tarjetas de los doctores. Su scope está limitado a la función `renderDoctors()`.
-
-- **`filterSpecialtyCheckboxes`** y **`filterYearsCheckboxes`**: Variables locales dentro de `applyFilters()` que almacenan las casillas de verificación correspondientes a las especialidades y años de experiencia.
-
-- **`console.log()`**: Usado para depurar el flujo de ejecución del código.
-
-## Funciones
-
-1. **`renderDoctors()`**: Genera dinámicamente las tarjetas de cada doctor en el DOM. Recibe un parámetro `filter` para aplicar los filtros de especialidad y experiencia.
-   - Si se seleccionan filtros de especialidad, solo se muestran los doctores que coinciden con esas especialidades.
-   - Si se selecciona el filtro de "Más de 5 años de experiencia", solo se muestran los doctores con más de 5 años de experiencia.
-
-2. **`applyFilters()`**: Maneja la lógica para obtener los filtros seleccionados por el usuario. Filtra los doctores basándose en las especialidades seleccionadas y si tienen más de 5 años de experiencia. Luego llama a `renderDoctors()` con los filtros aplicados.
-
-## Uso de `forEach`
-
-En el código se utiliza el método **`forEach()`** para recorrer el arreglo de doctores y generar las tarjetas de cada uno. El método `forEach` ejecuta una función en cada elemento del arreglo, permitiendo iterar de manera sencilla y clara. El código se ve de la siguiente manera:
-
-`
-doctors.forEach(doctor => {
-    // Lógica para filtrar y generar el contenido del doctor
-    const doctorCard = `
-        <article class="team__member" data-specialty="${doctor.specialty}" data-experience="${doctor.experience}">
-            <div class="card">
-                <img class="card-img-top team__photo" src="https://picsum.photos/seed/${doctor.name}/100" alt="Foto de ${doctor.name}">
-                <div class="card-body">
-                    <h3 class="team__name card-title">${doctor.name}</h3>
-                    <p class="team__specialty card-text">Especialidad: ${doctor.specialty}</p>
-                    <p class="team__profile card-text">Perfil: ${doctor.profile}</p>
-                    <p class="team__experience card-text">Años de experiencia: ${doctor.experience}</p>
-                </div>
-            </div>
-        </article>
-    `;
-    teamSection.innerHTML += doctorCard;
+// Agregar un nuevo doctor al arreglo
+document.getElementById('add-doctor').addEventListener('click', () => {
+    doctorArray.push({
+        name: "Dr. Nuevo Doctor",
+        specialty: "General",
+        experience: 5,
+        profile: "Nuevo doctor",
+        availableHours: "9am - 5pm",
+        contact: "nuevo@hospital.com"
+    });
+    document.getElementById('doctor-array').textContent = JSON.stringify(doctorArray, null, 2);
 });
+
+// Eliminar el último doctor del arreglo
+document.getElementById('remove-doctor').addEventListener('click', () => {
+    doctorArray.pop();  // Elimina el último doctor
+    document.getElementById('doctor-array').textContent = JSON.stringify(doctorArray, null, 2);
+});
+
+// Buscar un doctor por nombre
+document.getElementById('search-doctor').addEventListener('click', () => {
+    const doctorName = prompt("Ingrese el nombre del doctor:");
+    const foundDoctor = doctorArray.find(doctor => doctor.name.toLowerCase() === doctorName.toLowerCase());
+    if (foundDoctor) {
+        alert(`Doctor encontrado: ${JSON.stringify(foundDoctor, null, 2)}`);
+    } else {
+        alert("Doctor no encontrado.");
+    }
+});
+
+2. Pilas (Stack) para Gestión de Citas
+
+Utilizamos una pila citaStack para gestionar las citas, agregando y eliminando citas de acuerdo al orden de llegada.
+Código para la Pila:
+
+// Inicialización de la pila de citas
+let citaStack = [];
+
+// Agregar una nueva cita a la pila
+document.getElementById('add-cita').addEventListener('click', () => {
+    const paciente = prompt("Ingrese el nombre del paciente:");
+    citaStack.push(paciente);  // Agrega la cita al final de la pila
+    document.getElementById('cita-stack').textContent = JSON.stringify(citaStack, null, 2);
+});
+
+// Eliminar la última cita de la pila
+document.getElementById('remove-cita').addEventListener('click', () => {
+    const removedCita = citaStack.pop();  // Elimina la última cita
+    alert(`Cita eliminada: ${removedCita}`);
+    document.getElementById('cita-stack').textContent = JSON.stringify(citaStack, null, 2);
+});
+
+3. Colas (Queue) para Gestión de Pacientes
+
+Se utiliza una cola pacienteQueue para gestionar a los pacientes en el orden en que llegan.
+Código para la Cola:
+
+// Inicialización de la cola de pacientes
+let pacienteQueue = [];
+
+// Agregar un nuevo paciente a la cola
+document.getElementById('add-paciente').addEventListener('click', () => {
+    const paciente = prompt("Ingrese el nombre del paciente:");
+    pacienteQueue.push(paciente);  // Agrega el paciente al final de la cola
+    document.getElementById('paciente-queue').textContent = JSON.stringify(pacienteQueue, null, 2);
+});
+
+// Eliminar el primer paciente de la cola
+document.getElementById('remove-paciente').addEventListener('click', () => {
+    const removedPaciente = pacienteQueue.shift();  // Elimina el primer paciente de la cola
+    alert(`Paciente eliminado: ${removedPaciente}`);
+    document.getElementById('paciente-queue').textContent = JSON.stringify(pacienteQueue, null, 2);
+});
+
+Instalación
+
+    Asegúrate de tener los archivos JSON en el directorio dist/assets:
+        doctors.json
+        medical-services.json
+
+    Abre el archivo admin.html en tu navegador.
+
+    Verifica que los datos se muestren correctamente en el navegador y que las interacciones (agregar, eliminar, buscar) funcionen como se espera.
+
+Algoritmos Implementados
+1. Búsqueda Lineal
+
+Implementa una búsqueda lineal para encontrar un doctor en el arreglo. La complejidad es O(n).
+2. Ordenamiento por Selección
+
+El ordenamiento por selección organiza el arreglo de doctores seleccionando el valor mínimo en cada iteración y colocándolo en la posición correcta. La complejidad es O(n²).
+Resumen de Complejidad
+
+    Búsqueda Lineal: O(n)
+    Ordenamiento por Selección: O(n²)
+
+Para arreglos más grandes, se recomienda el uso de búsqueda binaria y algoritmos de ordenamiento más eficientes como quicksort o mergesort.
