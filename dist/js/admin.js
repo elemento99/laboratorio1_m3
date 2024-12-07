@@ -124,3 +124,4 @@ function sortDoctorsByExperience() {
     }
     displayDoctors(); 
 }
+export { queue };

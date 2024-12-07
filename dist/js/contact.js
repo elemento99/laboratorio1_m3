@@ -1,44 +1,82 @@
-// manejo de vartiables, operadores y prompts
-
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
+    const doctorSelect = document.getElementById("doctor");
+    const appointmentForm = document.getElementById("appointmentForm");  
+    const appointmentsList = document.getElementById("appointments-list");
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault(); 
-        try {
+    function loadDoctors() {
+        fetch("dist/assets/doctors.json")  
+            .then(response => response.json())
+            .then(data => {
+                const doctors = data.doctors;
+                doctorSelect.innerHTML = '<option value="">Seleccione un doctor</option>'; 
 
-            const userName = document.getElementById("name").value.trim();
-            if (!userName || typeof userName !== "string") {
-                throw new Error("El nombre ingresado no es válido.");
-            }
-            const userEmail = document.getElementById("email").value.trim();
-            if (!userEmail.includes("@")) {
-                throw new Error("El correo electrónico debe contener un '@'.");
-            }
-            const userPhone = document.getElementById("phone").value.trim();
-            if (isNaN(userPhone) || userPhone.length < 7) {
-                throw new Error("El teléfono debe ser un número válido de al menos 7 dígitos.");
-            }
+                
+                doctors.forEach(doctor => {
+                    const option = document.createElement("option");
+                    option.value = doctor.name;
+                    option.textContent = doctor.name;
+                    doctorSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar los doctores:', error);
+            });
+    }
 
-            console.log("Información del usuario:");
-            console.log(`Nombre: ${userName}`);
-            console.log(`Email: ${userEmail}`);
-            console.log(`Teléfono: ${userPhone}`);
+    
+    function displayAppointment(appointment) {
+        const appointmentElement = document.createElement("div");
+        appointmentElement.classList.add("appointment");
+        appointmentElement.innerHTML = `
+            <h4>Cita Agendada</h4>
+            <p><strong>Doctor:</strong> ${appointment.doctor}</p>
+            <p><strong>Fecha y Hora:</strong> ${appointment.date}</p>
+            <p><strong>Especialidad:</strong> ${appointment.specialty}</p>
+        `;
+        appointmentsList.appendChild(appointmentElement);
+    }
 
+   
+    appointmentForm.addEventListener("submit", function(event) {
+        event.preventDefault();
 
-            alert(`Información del usuario:\nNombre: ${userName}\nEmail: ${userEmail}\nTeléfono: ${userPhone}`);
-        } catch (error) {
-            console.error("Error al procesar los datos:", error.message);
-            alert(`Error: ${error.message}`);
+      
+        const doctorName = doctorSelect.value;
+        const date = document.getElementById("appointment-date").value; 
+
+        
+        if (!doctorName || !date) {
+            alert("Por favor, seleccione un doctor y una fecha.");
+            return;
         }
 
-        // Ejemplo de debugging
-        try {
-            debugger; // Pausa la ejecución para inspeccionar variables
-            let exampleVariable; // No inicializada
-            console.log(exampleVariable.length); // Esto lanzará un error
-        } catch (error) {
-            console.error("Error de debugging:", error.message);
-        }
+        
+        fetch("dist/assets/doctors.json")  
+            .then(response => response.json())
+            .then(data => {
+                const doctor = data.doctors.find(d => d.name === doctorName);
+                if (doctor) {
+                    // Crear el objeto de la cita
+                    const appointment = {
+                        doctor: doctor.name,
+                        date: date,
+                        specialty: doctor.specialty,
+                    };
+
+                    
+                    displayAppointment(appointment);
+
+               
+                    appointmentForm.reset();
+                } else {
+                    console.error('Doctor no encontrado');
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener los detalles del doctor:', error);
+            });
     });
+
+
+    loadDoctors();
 });

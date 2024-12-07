@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/3e29fb6875.js" crossorigin="anonymous"></script>
-    <script type="module" src="/dist/js/contact.js"></script>
 </head>
 
 <body>
@@ -40,8 +39,10 @@
 
     <main class="main container">
         <section class="main__contact row">
+        
             <div class="main__form col-md-6">
-                <form>
+                <h3>Contacto</h3>
+                <form id="contactForm">
                     <div class="main__form-group mb-3">
                         <label for="name" class="main__label form-label">Nombre:</label>
                         <input type="text" id="name" name="name" class="main__input form-control" required>
@@ -58,11 +59,47 @@
                         <label for="message" class="main__label form-label">Mensaje:</label>
                         <textarea id="message" name="message" class="main__textarea form-control" required></textarea>
                     </div>
-                    <button type="submit" class="main__button btn btn-primary w-100">Enviar</button>
+                   
                 </form>
-                
             </div>
 
+
+<div class="main__form col-md-6">
+    <h3>Agendar Cita</h3>
+    <form id="appointmentForm"> 
+        <div class="main__form-group mb-3">
+            <label for="appointmentName" class="main__label form-label">Nombre del paciente:</label>
+            <input type="text" id="appointmentName" name="appointmentName" class="main__input form-control" required>
+        </div>
+        <div class="main__form-group mb-3">
+            <label for="appointmentDate" class="main__label form-label">Fecha de la cita:</label>
+            <input type="date" id="appointment-date" name="appointmentDate" class="main__input form-control" required>
+        </div>
+        <div class="main__form-group mb-3">
+            <label for="appointmentTime" class="main__label form-label">Hora de la cita:</label>
+            <input type="time" id="appointmentTime" name="appointmentTime" class="main__input form-control" required>
+        </div>
+        <div class="main__form-group mb-3">
+            <label for="doctor" class="main__label form-label">Doctor:</label>
+            <select id="doctor" name="doctor" class="main__input form-control" required>
+                <option value="">Seleccione un doctor</option>
+            
+            </select>
+        </div>
+        <button type="submit" id="scheduleAppointmentButton" class="main__button btn btn-primary w-100">Agendar cita</button>
+    </form>
+</div>
+
+
+        <!-- Sección para ver los pacientes y las citas agendadas -->
+        <section id="appointments-section">
+            <h3>Citas Agendadas</h3>
+            <div id="appointments-list">
+                <!-- Aquí se agregarán las citas -->
+            </div>
+        </section>
+
+        </section>
             <section class="main__map col-md-6">
                 <h3 class="main__map-title">Mapa de ubicación</h3>
                 <iframe class="main__map-iframe"
@@ -72,6 +109,12 @@
                     alt="Mapa de ubicación de la clínica en Valparaíso, Chile"></iframe>
             </section>
         </section>
+
+
+
+  
+      
+        
     </main>
 
 
@@ -104,6 +147,7 @@
             <p class="footer__text">&copy; 2024 Clínica Médica. Todos los derechos reservados.</p>
         </div>
     </footer>
+    <script src="/dist/js/contact.js"></script>
 </body>
 
 </html>
